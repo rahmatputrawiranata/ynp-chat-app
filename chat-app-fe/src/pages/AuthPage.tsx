@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BASE_URL } from "../utils";
 import { AuthInterface } from "../utils/interfaces";
 import { useNavigate } from "react-router-dom";
 
-function HomePage() {
+function AuthPage() {
 
     const [form, setForm] = useState({ username: '', password: '' });
     const navigate = useNavigate();
@@ -86,4 +86,4 @@ function HomePage() {
 }
 
 
-export default HomePage;
+export default AuthPage;
