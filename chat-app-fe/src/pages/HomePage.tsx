@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../utils";
 
 function HomePage() {
 
     const [chatData, setChatData] = useState<{username: string; type: string; message: string; date: Date}[]>([])
     const [textMessage, setTextMessage] = useState<string>('')
     const navigate = useNavigate();
+    const [isConnected, setIsConnected] = useState(socket.connected);
 
     const handleLogout = () => {
         // remove token from local storage
@@ -18,38 +20,36 @@ function HomePage() {
 
 
     useEffect(() => {
-      const chatDataNew = []
-      const messages = ['Hello', 'Hi', 'How are you?', 'I am fine. Thank you!'];
-      const types = ['sender', 'receiver'];
-      for (let i = 0; i < 1000; i++) {
-        let date = new Date();
-        const randomMessageIndex = Math.floor(Math.random() * messages.length);
-        const randomTypeIndex = Math.floor(Math.random() * types.length);
-        date = new Date();
-  
-        chatDataNew.push({
-          username: `user${i % 2 + 1}`,
-          type: types[randomTypeIndex],
-          message: messages[randomMessageIndex],
-          date: date
-        });
+      function onConnect() {
+        setIsConnected(true);
       }
-
-      setChatData(chatDataNew)
+  
+      function onDisconnect() {
+        setIsConnected(false);
+      }
+  
+      socket.on('connect', onConnect);
+      socket.on('disconnect', onDisconnect);
+  
+      return () => {
+        socket.off('connect', onConnect);
+        socket.off('disconnect', onDisconnect);
+      };
+  
     }, [])
+
+    useEffect(() => {
+      socket.on('message', (data: {username: string; message: string}) => {
+        console.log(data)
+      })
+    }, [socket])
 
     const handleSend = () => {
       if(textMessage === '') return
-      const date = new Date();
-      setChatData([
-        ...chatData,
-        {
-          username: localStorage.getItem('username')!,
-          type: 'sender',
-          message: textMessage,
-          date: date
-        }
-      ])
+      socket.emit('message', {
+        username: localStorage.getItem('username'),
+        message: textMessage
+      })
       setTextMessage('')
     }
     
@@ -65,7 +65,7 @@ function HomePage() {
               </button>
           </div>
           {/* Content */}
-          <div className="flex flex-col overflow-hidden">
+          <div className="flex flex-col overflow-hidden h-full">
             {/* Chat */}
             <div className="flex flex-col-reverse overflow-y-auto  p-4 h-full">
               {chatData
@@ -86,7 +86,7 @@ function HomePage() {
             {/* Input Text */}
             <div className="flex justify-between p-4 border-t-2">
               <input type="text" value={textMessage} onChange={e => setTextMessage(e.target.value)} className="border-2 border-gray-300 rounded p-2 w-full" />
-              <button onClick={handleSend} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <button disabled={false} onClick={handleSend} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Send
               </button>
             </div>
