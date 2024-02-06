@@ -3,9 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Chat, ChatSchema } from './schemas/chat.schema';
 import { ChatService } from './chat.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { KAFKA_BROKER, KAFKA_CLIENT_ID, KAFKA_GROUP_ID } from 'utils';
+import { JWT_SECRET, KAFKA_BROKER, KAFKA_CLIENT_ID, KAFKA_GROUP_ID } from 'utils';
 import { ChatController } from './chat.controller';
 import { ChatGateway } from './chat.gateway';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
     imports: [
@@ -24,7 +25,10 @@ import { ChatGateway } from './chat.gateway';
             }
           }
         }
-      ])
+      ]),
+      JwtModule.register({
+        secret: JWT_SECRET
+      })
     ],
     providers: [ChatService, ChatGateway],
     exports: [ChatService],

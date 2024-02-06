@@ -22,8 +22,26 @@ export class ChatService implements OnModuleInit {
 
     handleIncomingMessageFromKafka(chat: Chat) {
         this.model.create(chat)
-        .then(() => this.chatGateway.server.emit('message', 'new message!'))
-        .catch(err => this.chatGateway.server.emit('message', 'error'));
+        .then(() => this.chatGateway.server.emit('receive-new-message', 'new message!'))
+        .catch(err => this.chatGateway.server.emit('receive-new-message', 'error'));
+    }
+
+    
+
+    async getChatHistories(data: {last_id?: string, limit?: number}) {
+        const queryOptions: any  = {
+        }
+
+        if(data.last_id) {
+            queryOptions._id = {$gt: data.last_id}
+        }
+        const model = this.model.find(queryOptions).sort({date: -1})
+
+        if(data.limit) {
+            model.limit(data.limit)
+        }
+
+        return model.exec()
     }
 
     onModuleInit() {

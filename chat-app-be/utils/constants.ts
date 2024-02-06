@@ -6,3 +6,4 @@ export const KAFKA_TOPICS = {
     chat: "chat",
     chatReply: "chat.reply"
 }
+export const JWT_SECRET="secretquickchatapp";
