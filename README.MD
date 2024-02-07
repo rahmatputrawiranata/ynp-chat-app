@@ -17,10 +17,13 @@ This project is a chat application that utilizes MongoDB, NestJS, React, Socket.
 6. Set `KAFKA_BROKERS` into `redpanda:9092`
 7. Navigate to the `chat-app-fe` directory
 8. Copy `.env.example` to `.env`
-3. Run the following command to start the application:
+9. Run the following command to start the application:
     ```
     docker-compose up -d
     ```
+10. Demo
+https://jam.dev/c/b7e64df9-f5a7-4644-83b5-f5fdf8bb5257
+
 
 ## Contact
 rahmatputrawiranata@gmail.com
