@@ -6,11 +6,11 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { ChatModule } from './chat/chat.module';
-
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     UsersModule,
-    MongooseModule.forRoot('mongodb://localhost/chat-app'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     AuthModule,
     ChatModule
   ],
