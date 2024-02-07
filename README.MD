@@ -8,19 +8,19 @@ This project is a chat application that utilizes MongoDB, NestJS, React, Socket.
 - Docker
 - Docker Compose
 
-## Installation
+## Installation with docker
 1. Clone the repository.
 2. Navigate to the project directory.
+3. Navigate to the `chat-app-be` directory
+4. Copy `.env.example` to `.env.production`
+5. Set `MONGO_URI` into `mongodb/chat-app`
+6. Set `KAFKA_BROKERS` into `redpanda:9092`
+7. Navigate to the `chat-app-fe` directory
+8. Copy `.env.example` to `.env`
 3. Run the following command to start the application:
     ```
-    docker-compose up
+    docker-compose up -d
     ```
-
-## Usage
-Explain how to use the application or any additional steps required.
-
-## Configuration
-If there are any configuration options, explain how to set them up.
 
 ## Contact
 rahmatputrawiranata@gmail.com
